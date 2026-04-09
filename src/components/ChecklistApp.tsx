@@ -5,6 +5,7 @@ import { ProgressBar } from "./ProgressBar";
 import { FilterTabs } from "./FilterTabs";
 import { ChecklistCard } from "./ChecklistCard";
 import { AddItemForm } from "./AddItemForm";
+import { UserHeader } from "./UserHeader";
 import { useChecklist } from "@/hooks/useChecklist";
 
 type Filter = "전체" | "완료" | "미완료";
