@@ -55,6 +55,7 @@ export function ChecklistApp() {
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-2xl px-4 py-6 sm:py-10">
+        <UserHeader />
         <ChecklistHeader />
         <ProgressBar completed={completed} total={items.length} />
         <FilterTabs current={filter} onChange={setFilter} />
