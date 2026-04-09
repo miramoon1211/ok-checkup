@@ -5,6 +5,7 @@ import { ProgressBar } from "./ProgressBar";
 import { FilterTabs } from "./FilterTabs";
 import { ChecklistCard } from "./ChecklistCard";
 import { AddItemForm } from "./AddItemForm";
+import { UserHeader } from "./UserHeader";
 import { useChecklist } from "@/hooks/useChecklist";
 
 type Filter = "전체" | "완료" | "미완료";
@@ -54,6 +55,7 @@ export function ChecklistApp() {
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-2xl px-4 py-6 sm:py-10">
+        <UserHeader />
         <ChecklistHeader />
         <ProgressBar completed={completed} total={items.length} />
         <FilterTabs current={filter} onChange={setFilter} />

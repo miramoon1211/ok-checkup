@@ -24,6 +24,7 @@ export type Database = {
           sort_order: number
           title: string
           updated_at: string
+          user_id: string
         }
         Insert: {
           category: string
@@ -34,6 +35,7 @@ export type Database = {
           sort_order?: number
           title: string
           updated_at?: string
+          user_id: string
         }
         Update: {
           category?: string
@@ -44,6 +46,7 @@ export type Database = {
           sort_order?: number
           title?: string
           updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
