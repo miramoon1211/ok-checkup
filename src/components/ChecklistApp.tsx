@@ -4,12 +4,15 @@ import { ChecklistHeader } from "./ChecklistHeader";
 import { ProgressBar } from "./ProgressBar";
 import { FilterTabs } from "./FilterTabs";
 import { ChecklistCard } from "./ChecklistCard";
+import { AddItemForm } from "./AddItemForm";
 import { useChecklist } from "@/hooks/useChecklist";
 
 type Filter = "전체" | "완료" | "미완료";
 
+const ALL_CATEGORIES = ["월간 점검", "분기 점검"];
+
 export function ChecklistApp() {
-  const { items, isLoading, updateItem } = useChecklist();
+  const { items, isLoading, updateItem, addItem, deleteItem } = useChecklist();
   const [filter, setFilter] = useState<Filter>("전체");
   const [openCats, setOpenCats] = useState<Set<string>>(new Set());
 
@@ -22,6 +25,14 @@ export function ChecklistApp() {
 
   const updateMemo = (id: string, memo: string) => {
     updateItem.mutate({ id, memo });
+  };
+
+  const handleDelete = (id: string) => {
+    deleteItem.mutate(id);
+  };
+
+  const handleAdd = (title: string, category: string) => {
+    addItem.mutate({ title, category });
   };
 
   const toggleCat = (cat: string) => {
@@ -80,6 +91,7 @@ export function ChecklistApp() {
                           item={item}
                           onToggle={toggleCheck}
                           onMemoChange={updateMemo}
+                          onDelete={handleDelete}
                         />
                       ))}
                     </div>
@@ -92,6 +104,7 @@ export function ChecklistApp() {
                 해당하는 항목이 없습니다.
               </p>
             )}
+            <AddItemForm categories={ALL_CATEGORIES} onAdd={handleAdd} />
           </div>
         )}
       </div>

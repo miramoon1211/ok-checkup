@@ -49,5 +49,42 @@ export function useChecklist() {
     },
   });
 
-  return { items, isLoading, updateItem };
+  const addItem = useMutation({
+    mutationFn: async (input: { title: string; category: string }) => {
+      const maxSort = items.length > 0 ? Math.max(...items.map((i) => i.sort_order)) : 0;
+      const { error } = await supabase
+        .from("checklist_items")
+        .insert({ title: input.title, category: input.category, sort_order: maxSort + 1 });
+      if (error) throw error;
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["checklist_items"] });
+    },
+  });
+
+  const deleteItem = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from("checklist_items")
+        .delete()
+        .eq("id", id);
+      if (error) throw error;
+    },
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ["checklist_items"] });
+      const prev = queryClient.getQueryData<CheckItem[]>(["checklist_items"]);
+      queryClient.setQueryData<CheckItem[]>(["checklist_items"], (old) =>
+        old?.filter((i) => i.id !== id) ?? []
+      );
+      return { prev };
+    },
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.prev) queryClient.setQueryData(["checklist_items"], ctx.prev);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["checklist_items"] });
+    },
+  });
+
+  return { items, isLoading, updateItem, addItem, deleteItem };
 }
