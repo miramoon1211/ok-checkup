@@ -28,7 +28,7 @@ export function ChecklistApp() {
   const [items, setItems] = useState<CheckItem[]>(initialItems);
   const [filter, setFilter] = useState<Filter>("전체");
   const allCategories = [...new Set(initialItems.map((i) => i.category))];
-  const [openCats, setOpenCats] = useState<Set<string>>(new Set(allCategories));
+  const [openCats, setOpenCats] = useState<Set<string>>(new Set());
 
   const completed = items.filter((i) => i.checked).length;
 
