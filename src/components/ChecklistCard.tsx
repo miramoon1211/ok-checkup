@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CheckCircle2, Circle, ChevronDown, ChevronUp } from "lucide-react";
-import type { CheckItem } from "./ChecklistApp";
+import type { CheckItem } from "@/hooks/useChecklist";
 
 interface Props {
   item: CheckItem;
