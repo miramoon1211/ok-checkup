@@ -17,7 +17,7 @@ export function ProgressBar({ completed, total }: Props) {
       </div>
       <div className="h-2.5 w-full overflow-hidden rounded-full bg-muted">
         <div
-          className="h-full rounded-full bg-primary transition-all duration-500 ease-out"
+          className="h-full rounded-full bg-red-500 transition-all duration-500 ease-out"
           style={{ width: `${pct}%` }}
         />
       </div>
