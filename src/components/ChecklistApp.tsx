@@ -27,6 +27,8 @@ type Filter = "전체" | "완료" | "미완료";
 export function ChecklistApp() {
   const [items, setItems] = useState<CheckItem[]>(initialItems);
   const [filter, setFilter] = useState<Filter>("전체");
+  const allCategories = [...new Set(initialItems.map((i) => i.category))];
+  const [openCats, setOpenCats] = useState<Set<string>>(new Set(allCategories));
 
   const completed = items.filter((i) => i.checked).length;
 
@@ -40,6 +42,14 @@ export function ChecklistApp() {
     setItems((prev) =>
       prev.map((i) => (i.id === id ? { ...i, memo } : i))
     );
+  };
+
+  const toggleCat = (cat: string) => {
+    setOpenCats((prev) => {
+      const next = new Set(prev);
+      next.has(cat) ? next.delete(cat) : next.add(cat);
+      return next;
+    });
   };
 
   const filtered = items.filter((i) => {
@@ -56,26 +66,44 @@ export function ChecklistApp() {
         <ChecklistHeader />
         <ProgressBar completed={completed} total={items.length} />
         <FilterTabs current={filter} onChange={setFilter} />
-        <div className="mt-6 space-y-8">
-          {categories.map((cat) => (
-            <div key={cat}>
-              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                {cat}
-              </h2>
-              <div className="space-y-3">
-                {filtered
-                  .filter((i) => i.category === cat)
-                  .map((item) => (
-                    <ChecklistCard
-                      key={item.id}
-                      item={item}
-                      onToggle={toggleCheck}
-                      onMemoChange={updateMemo}
-                    />
-                  ))}
+        <div className="mt-6 space-y-4">
+          {categories.map((cat) => {
+            const catItems = filtered.filter((i) => i.category === cat);
+            const catCompleted = catItems.filter((i) => i.checked).length;
+            const isOpen = openCats.has(cat);
+            return (
+              <div key={cat} className="overflow-hidden rounded-xl border bg-card">
+                <button
+                  onClick={() => toggleCat(cat)}
+                  className="flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-secondary/50"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm font-semibold text-foreground">{cat}</span>
+                    <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                      {catCompleted}/{catItems.length}
+                    </span>
+                  </div>
+                  <ChevronDown
+                    className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                {isOpen && (
+                  <div className="border-t px-1 py-1">
+                    {catItems.map((item) => (
+                      <ChecklistCard
+                        key={item.id}
+                        item={item}
+                        onToggle={toggleCheck}
+                        onMemoChange={updateMemo}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
           {filtered.length === 0 && (
             <p className="py-12 text-center text-muted-foreground">
               해당하는 항목이 없습니다.
