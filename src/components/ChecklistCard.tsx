@@ -13,10 +13,10 @@ export function ChecklistCard({ item, onToggle, onMemoChange }: Props) {
 
   return (
     <div
-      className={`rounded-xl border p-4 transition-colors ${
+      className={`rounded-lg px-3 py-3 transition-colors ${
         item.checked
-          ? "border-border/50 bg-muted/40"
-          : "border-border bg-card hover:bg-secondary/50"
+          ? "bg-muted/30"
+          : "hover:bg-secondary/40"
       }`}
     >
       <div className="flex items-center gap-3">
